@@ -12,6 +12,8 @@ export const app = (
         const updatedView = view(model, dispatch)
         node.replaceChild(updatedView, currentView)
         currentView = updatedView
+        console.log(JSON.stringify(message))
+        console.log(JSON.stringify(model))
     }
 
     let model = initModel

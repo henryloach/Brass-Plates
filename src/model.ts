@@ -1,17 +1,18 @@
 import { createEmptyPlateArray } from "./utils"
 
 export type Model = {
-    plateList: Plate[]
+    plateList: Plate[],
+    selectedPlateIndex: number | null
 }
 
 export const initModel: Model = {
-    plateList: createEmptyPlateArray()
+    plateList: createEmptyPlateArray(),
+    selectedPlateIndex: null
 }
 
 export type Plate = {
     text: String;
     font: Font;
-    selected: boolean
 }
 
 type Font =
