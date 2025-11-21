@@ -1,7 +1,22 @@
+import { createEmptyPlateArray } from "./utils"
+
 export type Model = {
-    count: number
+    plateList: Plate[]
 }
 
 export const initModel: Model = {
-    count: 0
+    plateList: createEmptyPlateArray()
 }
+
+export type Plate = {
+    text: String;
+    font: Font
+}
+
+type Font =
+    | "Script"
+    | "Classic Script"
+    | "Itallic"
+    | "Serif"
+    | "Sans Serif"
+    | "Handwritten"
