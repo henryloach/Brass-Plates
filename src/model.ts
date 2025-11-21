@@ -10,7 +10,8 @@ export const initModel: Model = {
 
 export type Plate = {
     text: String;
-    font: Font
+    font: Font;
+    selected: boolean
 }
 
 type Font =

@@ -4,7 +4,8 @@ export const createEmptyPlateArray = (): Plate[] => {
     return Array.from({ length: 16 }, (value, index) => {
         return {
             text: "",
-            font: "Script"
+            font: "Script",
+            selected: false
         }
     })
 }
