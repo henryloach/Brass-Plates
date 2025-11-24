@@ -1,96 +1,80 @@
-import h from 'hyperscript'
+import { h, VNode } from 'snabbdom'
 import hh from 'hyperscript-helpers'
-import { Model } from './model'
+import { Model, Plate } from './model'
 import { Message } from './messages'
-import { Plate } from './model'
 import { plateWidth, plateHeight, fontMap } from './data'
 import { getPlatePosition } from './utils'
 
-const { div, button, svg, pre } = hh(h)
+const { div, button, svg, pre, form } = hh(h)
+
+const plateSizeX = 80.75
+const plateSizeY = 16.35
+const wallThickness = 5.0
+
+const numRows = 8
+const numColumns = 2
+
+const unitCellX = plateSizeX + wallThickness
+const unitCellY = plateSizeY + wallThickness
+
+const jigSizeX = unitCellX * numColumns
+const jigSizeY = unitCellY * numRows
+
+const unitCell = (row: number, column: number) => {
+    const x = column * unitCellX + wallThickness / 2
+    const y = row * unitCellY + wallThickness / 2
+    return h('rect', {
+        attrs: {
+            x: `${x}mm`,
+            y: `${y}mm`,
+            width: `${plateSizeX}mm`,
+            height: `${plateSizeY}mm`,
+            stroke: 'gold',
+            fill: 'none'
+        }
+    })
+}
+
+const border = h('rect', {
+    attrs: {
+        x: `0mm`,
+        y: `0mm`,
+        width: `${jigSizeX}mm`,
+        height: `${jigSizeY}mm`,
+        stroke: 'gold',
+        fill: 'none'
+    }
+})
+
+const unitText = (row: number, column: number, text: string) => {
+    const x = column * unitCellX + wallThickness / 2 + plateSizeX / 2
+    const y = row * unitCellY + wallThickness / 2 + plateSizeY / 2
+    return h('text',
+        {
+            attrs: {
+                x: `${x}mm`,
+                y: `${y}mm`,
+                'text-anchor': 'middle',
+                'dominant-baseline': 'central',
+            }
+        },
+        text   // children go here
+    )
+}
 
 export const view = (model: Model, dispatch: any) => {
-    const plates = model.plateList.map((plate, i) =>
-        div({ style: "position:relative;" }, [
-            plateView(plate, i, dispatch),
-            renderEditingInput(model, plate, i, dispatch)
-        ])
-    )
-    return div(plates)
-}
-
-const plateView = (plate: Plate, index: number, dispatch: (message: Message) => void) => {
-    //if (plate.selected) return null
-    const { x, y } = getPlatePosition(index)
-
-    return svg({
-        width: plateWidth, 
-        height: plateHeight,
-        style: `
-            position:absolute;
-            left:${x}px;
-            top:${y}px;
-            cursor:pointer;
-        `,
-        onclick: () => dispatch(["select plate", index])
-    }, [
-        h("rect", {
-            x: 0, y: 0,
-            width: plateWidth, 
-            height: plateHeight,
-            stroke: "#888",     // not black, not engraved
-            fill: "none",
-            "stroke-width": 1
-        }),
-        h("text", {
-            x: plateWidth / 2,
-            y: plateHeight / 2,
-            "dominant-baseline": "middle",
-            "text-anchor": "middle",
-            "font-family": fontMap[plate.font],
-            "font-size": "12px",
-            fill: "black"      // engraving color
-        }, plate.text)
-    ])
-}
-
-const renderEditingInput = (
-    model: Model,
-    plate: Plate,
-    index: number,
-    dispatch: (message: Message) => void
-) => {
-    if (model.selectedPlateIndex !== index) return null
-
-    const { x, y } = getPlatePosition(index)
-
-    return h("form", {
-        style: `
-            position: absolute;
-            left: ${x}px;
-            top: ${y}px;
-            margin: 0;
-        `,
-        onsubmit: (e: Event) => {
-            e.preventDefault(); // Prevent page reload
-            dispatch(["deselect plate", index])
-        }
-    }, [
-        h("input", {
-            type: "text",
-            value: plate.text,
-            autofocus: true,
-            style: `
-                width: ${plateWidth}px;
-                height: ${plateHeight}px;
-                font-size: 16px;
-            `,
-            oninput: (e: any) =>
-                dispatch(["edit plate text", index, e.target.value]),
-            onkeydown: (e: KeyboardEvent) => {
-                if (e.key === "Escape") {
-                    dispatch(["deselect plate", index]);
-                }
+    return h('svg',
+        {
+            attrs: {
+                width: `${jigSizeX}mm`,
+                height: `${jigSizeY}mm`,
             }
-        })
-    ])
+        },
+        [
+            border,
+            unitText(0,0,'Test'),
+            unitText(7,1,'Chris'),
+            ...Array.from({ length: numColumns * numRows }, (v, i) => unitCell(Math.floor(i / 2), i % 2))
+        ]
+    )
 }

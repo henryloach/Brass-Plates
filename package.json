@@ -13,6 +13,8 @@
   "devDependencies": {
     "@types/hyperscript": "^0.0.7",
     "clean-webpack-plugin": "^4.0.0",
+    "css-loader": "^7.1.2",
+    "style-loader": "^4.0.0",
     "ts-loader": "^9.5.4",
     "typescript": "^5.9.3",
     "webpack": "^5.102.1",
@@ -21,6 +23,7 @@
   },
   "dependencies": {
     "hyperscript": "^2.0.2",
-    "hyperscript-helpers": "^3.0.3"
+    "hyperscript-helpers": "^3.0.3",
+    "snabbdom": "^3.6.3"
   }
 }
