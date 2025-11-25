@@ -2,37 +2,39 @@ import { h, VNode } from 'snabbdom'
 import hh from 'hyperscript-helpers'
 import { Model, Plate } from './model'
 import { Message } from './messages'
-import { plateWidth, plateHeight, fontMap } from './data'
+import { fontMap, plateSizeX, plateSizeY, unitCellX, unitCellY, wallThickness, bevelSize, numColumns, jigSizeX, jigSizeY, numRows } from './data'
 import { getPlatePosition } from './utils'
 
-const { div, button, svg, pre, form } = hh(h)
+const { div, button, svg, pre, form, input } = hh(h)
 
-const plateSizeX = 80.75
-const plateSizeY = 16.35
-const wallThickness = 5.0
-
-const numRows = 8
-const numColumns = 2
-
-const unitCellX = plateSizeX + wallThickness
-const unitCellY = plateSizeY + wallThickness
-
-const jigSizeX = unitCellX * numColumns
-const jigSizeY = unitCellY * numRows
-
-const unitCell = (row: number, column: number) => {
+const unitCell = (row: number, column: number, dispatch: (message: Message) => void) => {
     const x = column * unitCellX + wallThickness / 2
     const y = row * unitCellY + wallThickness / 2
-    return h('rect', {
-        attrs: {
-            x: `${x}mm`,
-            y: `${y}mm`,
-            width: `${plateSizeX}mm`,
-            height: `${plateSizeY}mm`,
-            stroke: 'gold',
-            fill: 'none'
-        }
-    })
+    return [
+        h('rect', {
+            attrs: {
+                x: `${x}mm`,
+                y: `${y}mm`,
+                width: `${plateSizeX}mm`,
+                height: `${plateSizeY}mm`,
+                stroke: 'gold',
+                fill: 'transparent'
+            },
+            on: {
+                click: () => dispatch(['select plate', row * numColumns + column])
+            }
+        }),
+        h('rect', {
+            attrs: {
+                x: `${x + bevelSize}mm`,
+                y: `${y + bevelSize}mm`,
+                width: `${plateSizeX - 2 * bevelSize}mm`,
+                height: `${plateSizeY - 2 * bevelSize}mm`,
+                stroke: 'gold',
+                fill: 'none'
+            }
+        })
+    ]
 }
 
 const border = h('rect', {
@@ -46,7 +48,7 @@ const border = h('rect', {
     }
 })
 
-const unitText = (row: number, column: number, text: string) => {
+const unitText = (row: number, column: number, plate: Plate) => {
     const x = column * unitCellX + wallThickness / 2 + plateSizeX / 2
     const y = row * unitCellY + wallThickness / 2 + plateSizeY / 2
     return h('text',
@@ -56,26 +58,79 @@ const unitText = (row: number, column: number, text: string) => {
                 y: `${y}mm`,
                 'text-anchor': 'middle',
                 'dominant-baseline': 'central',
-                'font-size': '10mm'
+                'font-size': '7mm',
+                'font-family': fontMap[plate.font]
             }
         },
-        text   // children go here
+        plate.text
     )
 }
 
-export const view = (model: Model, dispatch: any) => {
-    return h('svg',
+const editInput = (model: Model, dispatch: (message: Message) => void) => {
+
+    if (model.selectedPlateIndex === null) return null
+    const index = model.selectedPlateIndex
+
+    const bodyMargin = 2
+    const row = Math.floor(index / 2)
+    const column = index % 2
+    const x = column * unitCellX + wallThickness / 2 + bodyMargin
+    const y = row * unitCellY + wallThickness / 2 + bodyMargin
+
+    return input(
         {
             attrs: {
-                width: `${jigSizeX}mm`,
-                height: `${jigSizeY}mm`,
-            }
-        },
-        [
-            border,
-            unitText(0,0,'Test'),
-            unitText(7,1,'Chris'),
-            ...Array.from({ length: numColumns * numRows }, (v, i) => unitCell(Math.floor(i / 2), i % 2))
-        ]
+                type: 'text',
+                value: model.plateList[index].text,
+            },
+            style: {
+                position: 'absolute',
+                left: `${x}mm`,
+                top: `${y}mm`,
+                width: `${plateSizeX}mm`,
+                height: `${plateSizeY}mm`,
+                'text-align': 'center'
+            },
+            hook: {
+                insert: (vnode: any) => {
+                    const inputElement = (vnode.elm as HTMLInputElement)
+                    inputElement.focus()
+                    inputElement.select()
+                }
+            },
+            on: {
+                input: (e: any) => dispatch(['edit plate text', index, e.target.value]),
+                blur: () => dispatch(['deselect plate', index]),
+                keydown: (e: KeyboardEvent) => {
+                    if (e.key === 'Escape' || e.key === 'Enter') dispatch(['deselect plate', index])
+                }
+            },
+        }
     )
+}
+
+export const view = (model: Model, dispatch: (message: Message) => void) => {
+    return div([
+        h('svg',
+            {
+                attrs: {
+                    width: `${jigSizeX}mm`,
+                    height: `${jigSizeY}mm`,
+                }
+            },
+            [
+                border,
+                ...model.plateList.map((plate, index) => {
+                    const row = Math.floor(index / 2)
+                    const column = index % 2
+                    return unitText(row, column, plate)
+                }),
+                ...Array.from({ length: numColumns * numRows }, (_, index) => {
+                    return unitCell(Math.floor(index / 2), index % 2, dispatch)
+                }).flat()
+            ]
+        ),
+        editInput(model, dispatch),
+        pre(JSON.stringify(model, null, 2))
+    ])
 }

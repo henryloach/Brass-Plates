@@ -6,12 +6,30 @@ export type Model = {
 }
 
 export const initModel: Model = {
-    plateList: createEmptyPlateArray(),
+    //plateList: createEmptyPlateArray(),
+    plateList: [
+        { text: 'Chris', font: 'Script' },
+        { text: 'CHL', font: 'Handwritten' },
+        { text: 'Farrar & Tanner', font: 'Script' },
+        { text: 'Onion Bhaji', font: 'Handwritten' },
+        { text: 'Chris', font: 'Script' },
+        { text: 'CHL', font: 'Handwritten' },
+        { text: 'Chris', font: 'Script' },
+        { text: 'CHL', font: 'Handwritten' },
+        { text: 'Chris', font: 'Script' },
+        { text: 'CHL', font: 'Handwritten' },
+        { text: 'Chris', font: 'Script' },
+        { text: 'CHL', font: 'Handwritten' },
+        { text: 'Chris', font: 'Script' },
+        { text: 'CHL', font: 'Handwritten' },
+        { text: 'Chris', font: 'Script' },
+        { text: 'CHL', font: 'Handwritten' },
+    ],
     selectedPlateIndex: null
 }
 
 export type Plate = {
-    text: String;
+    text: string;
     font: Font;
 }
 
