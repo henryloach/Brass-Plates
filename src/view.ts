@@ -1,11 +1,11 @@
 import { h, VNode } from 'snabbdom'
 import hh from 'hyperscript-helpers'
-import { Model, Plate } from './model'
+import { Font, Model, Plate } from './model'
 import { Message } from './messages'
 import { fontMap, plateSizeX, plateSizeY, unitCellX, unitCellY, wallThickness, bevelSize, numColumns, jigSizeX, jigSizeY, numRows } from './data'
 import { getPlatePosition } from './utils'
 
-const { div, button, svg, pre, form, input } = hh(h)
+const { div, button, svg, pre, form, input, select, option } = hh(h)
 
 const unitCell = (row: number, column: number, dispatch: (message: Message) => void) => {
     const x = column * unitCellX + wallThickness / 2
@@ -77,7 +77,7 @@ const editInput = (model: Model, dispatch: (message: Message) => void) => {
     const x = column * unitCellX + wallThickness / 2 + bodyMargin
     const y = row * unitCellY + wallThickness / 2 + bodyMargin
 
-    return input(
+    const textInput = input(
         {
             attrs: {
                 type: 'text',
@@ -87,7 +87,7 @@ const editInput = (model: Model, dispatch: (message: Message) => void) => {
                 position: 'absolute',
                 left: `${x}mm`,
                 top: `${y}mm`,
-                width: `${plateSizeX}mm`,
+                width: `${plateSizeX * 3 / 4}mm`,
                 height: `${plateSizeY}mm`,
                 'text-align': 'center'
             },
@@ -100,18 +100,56 @@ const editInput = (model: Model, dispatch: (message: Message) => void) => {
             },
             on: {
                 input: (e: any) => dispatch(['edit plate text', index, e.target.value]),
-                blur: () => dispatch(['deselect plate', index]),
                 keydown: (e: KeyboardEvent) => {
                     if (e.key === 'Escape' || e.key === 'Enter') dispatch(['deselect plate', index])
                 }
             },
         }
     )
+
+    const fontInput = select(
+        {
+            attrs: {
+                value: model.plateList[index].font
+            },
+            style: {
+                position: 'absolute',
+                left: `${x + plateSizeX * 3 / 4}mm`,
+                top: `${y}mm`,
+                width: `${plateSizeX * 1 / 4}mm`,
+                height: `${plateSizeY}mm`
+            },
+            on: {
+                change: (e: any) => dispatch(['edit plate font', index, e.target.value])
+            }
+        },
+        Object.keys(fontMap).map(fontName => {
+            return option(
+                {
+                    attrs: {
+                        value: fontName
+                    }
+                },
+                fontName
+            )
+        })
+
+    )
+    return div(
+        {   
+            attrs: {
+                tabindex: 0
+            },
+            on: {
+                blur: () => dispatch(['deselect plate', index])
+            }
+        },
+        [textInput, fontInput])
 }
 
 export const view = (model: Model, dispatch: (message: Message) => void) => {
     return div([
-        h('svg',
+        svg(
             {
                 attrs: {
                     width: `${jigSizeX}mm`,

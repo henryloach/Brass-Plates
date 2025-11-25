@@ -33,7 +33,7 @@ export type Plate = {
     font: Font;
 }
 
-type Font =
+export type Font =
     | "Script"
     | "Classic Script"
     | "Itallic"
