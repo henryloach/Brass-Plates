@@ -56,6 +56,7 @@ const unitText = (row: number, column: number, text: string) => {
                 y: `${y}mm`,
                 'text-anchor': 'middle',
                 'dominant-baseline': 'central',
+                'font-size': '10mm'
             }
         },
         text   // children go here
