@@ -13,6 +13,8 @@ export const unitCellY = plateSizeY + wallThickness
 export const jigSizeX = unitCellX * numColumns
 export const jigSizeY = unitCellY * numRows
 
+export const bodyMargin = 2
+
 export const fontMap = {
     "Script": "Cursiv",
     "Classic Script": "Dancing Script",
@@ -21,3 +23,6 @@ export const fontMap = {
     "Sans Serif": "Roboto",
     "Handwritten": "Caveat"
 }
+
+export const defaultFontSize = 6
+export const maxWidth = plateSizeX - 16

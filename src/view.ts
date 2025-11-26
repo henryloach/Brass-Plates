@@ -1,15 +1,15 @@
 import { h, VNode } from 'snabbdom'
 import hh from 'hyperscript-helpers'
-import { Font, Model, Plate } from './model'
+import { Model, Plate } from './model'
 import { Message } from './messages'
-import { fontMap, plateSizeX, plateSizeY, unitCellX, unitCellY, wallThickness, bevelSize, numColumns, jigSizeX, jigSizeY, numRows } from './data'
-import { getPlatePosition } from './utils'
+import { fontMap, plateSizeX, plateSizeY, bevelSize, numColumns, jigSizeX, jigSizeY, numRows, bodyMargin } from './data'
+import { getFontSizeToFit, getPlatePosition } from './utils'
 
-const { div, button, svg, pre, form, input, select, option, span } = hh(h)
+const { div, button, svg, input, select, option, span } = hh(h)
 
-const unitCell = (row: number, column: number, dispatch: (message: Message) => void) => {
-    const x = column * unitCellX + wallThickness / 2
-    const y = row * unitCellY + wallThickness / 2
+const unitCell = (index: number, dispatch: (message: Message) => void) => {
+    const [x, y] = getPlatePosition(index, 'topLeft')
+
     return [
         h('rect', {
             attrs: {
@@ -21,7 +21,7 @@ const unitCell = (row: number, column: number, dispatch: (message: Message) => v
                 fill: 'transparent'
             },
             on: {
-                click: () => dispatch(['select plate text', row * numColumns + column])
+                click: () => dispatch(['select plate text', index])
             }
         }),
         h('rect', {
@@ -48,34 +48,11 @@ const border = h('rect', {
     }
 })
 
-const getFontSizeToFit = (text: string, defaultSize: number, maxWidth: number, fontFamily: string): number => {
-    maxWidth = maxWidth * 3.78 // mm to px
-    const svgNS = "http://www.w3.org/2000/svg"
-    const svg = document.createElementNS(svgNS, "svg")
-    svg.style.position = "absolute"
-    svg.style.visibility = "hidden"
-    document.body.appendChild(svg)
 
-    const tempText = document.createElementNS(svgNS, "text")
-    tempText.setAttribute("font-family", fontFamily)
-    tempText.setAttribute("font-size", `${defaultSize}mm`)
-    tempText.textContent = text
-    svg.appendChild(tempText)
 
-    const textWidth = tempText.getComputedTextLength()
-    document.body.removeChild(svg)
-
-    if (textWidth <= maxWidth) return defaultSize
-    return defaultSize * (maxWidth / textWidth)
-}
-
-const unitText = (row: number, column: number, plate: Plate) => {
-    const x = column * unitCellX + wallThickness / 2 + plateSizeX / 2
-    const y = row * unitCellY + wallThickness / 2 + plateSizeY / 2
-
-    const defaultFontSize = 6.5
-    const maxWidth = plateSizeX - 16 // mm padding
-    const fontSize = getFontSizeToFit(plate.text, defaultFontSize, maxWidth, fontMap[plate.font])
+const unitText = (index: number, plate: Plate) => {
+    const [x, y] = getPlatePosition(index, 'center')
+    const fontSize = getFontSizeToFit(plate)
 
     return h('text',
         {
@@ -98,11 +75,9 @@ const editFontInput = (model: Model, dispatch: (message: Message) => void): VNod
     const [index, editOption] = model.selectedPlate
     if (editOption === 'text') return null
 
-    const bodyMargin = 2
-    const row = Math.floor(index / 2)
-    const column = index % 2
-    const x = column * unitCellX + wallThickness / 2 + bodyMargin
-    const y = row * unitCellY + wallThickness / 2 + bodyMargin
+
+    let [x, y] = getPlatePosition(index, 'topLeft');
+    [x, y] = [x + bodyMargin, y + bodyMargin]
 
     const fontInput = select(
         {
@@ -147,10 +122,9 @@ const fontSelectArrows = (model: Model, dispatch: (message: Message) => void): V
     const arrow = (index: number) => {
 
         if (model.selectedPlate !== null && index === model.selectedPlate[0]) return null
-        const row = Math.floor(index / 2)
-        const column = index % 2
-        const x = column * unitCellX + wallThickness / 2 + bodyMargin + plateSizeX * 7 / 8
-        const y = row * unitCellY + wallThickness / 2 + bodyMargin + plateSizeY / 4
+        let [x, y] = getPlatePosition(index, 'topLeft');
+        [x, y] = [x + bodyMargin + plateSizeX * 7 / 8, y + bodyMargin + plateSizeY / 4]
+
         return span(
             {
                 attrs: {
@@ -189,15 +163,11 @@ const editTextInput = (model: Model, dispatch: (message: Message) => void): VNod
     if (editOption === 'font') return null
     const plate = model.plateList[index]
 
-    const bodyMargin = 2
-    const row = Math.floor(index / 2)
-    const column = index % 2
-    const x = column * unitCellX + wallThickness / 2 + bodyMargin
-    const y = row * unitCellY + wallThickness / 2 + bodyMargin
+    let [x, y] = getPlatePosition(index, 'topLeft');
+    [x, y] = [x + bodyMargin, y + bodyMargin]
 
-    const defaultFontSize = 6.5
-    const maxWidth = plateSizeX - 16 // mm padding
-    const fontSize = getFontSizeToFit(plate.text, defaultFontSize, maxWidth, fontMap[plate.font])
+
+    const fontSize = getFontSizeToFit(plate)
 
     const textInput = input(
         {
@@ -249,12 +219,10 @@ const renderSvg = (model: Model, dispatch: (message: Message) => void): VNode =>
         [
             border,
             ...model.plateList.map((plate, index) => {
-                const row = Math.floor(index / 2)
-                const column = index % 2
-                return unitText(row, column, plate)
+                return unitText(index, plate)
             }),
             ...Array.from({ length: numColumns * numRows }, (_, index) => {
-                return unitCell(Math.floor(index / 2), index % 2, dispatch)
+                return unitCell(index, dispatch)
             }).flat()
         ]
     )

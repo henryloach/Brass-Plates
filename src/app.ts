@@ -15,8 +15,6 @@ export const app = (
         const updatedVNode = view(model, dispatch)
         domNode = patch(domNode, updatedVNode)
         currentVNode = updatedVNode
-        // console.log(JSON.stringify(message, null, 2))
-        // console.log(JSON.stringify(model, null, 2))
     }
 
     let model = initModel
