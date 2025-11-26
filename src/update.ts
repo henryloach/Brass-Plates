@@ -5,12 +5,13 @@ export const update = (model: Model, message: Message): Model => {
     const [messageType, ...rest] = message
 
     switch (messageType) {
-        case "select plate": {
+        case "select plate text": {
             const [index] = rest as [number]
-            return { ...model, selectedPlateIndex: index }
+            return { ...model, selectedPlate: [index, 'text'] }
         }
-        case "deselect plate": {
-            return { ...model, selectedPlateIndex: null }
+        case 'select plate font': {
+            const [index] = rest as [number]
+            return { ...model, selectedPlate: [index, 'font'] }
         }
         case "edit plate text": {
             const [targetIndex, text] = rest as [number, string]
@@ -25,6 +26,9 @@ export const update = (model: Model, message: Message): Model => {
                 index === targetIndex ? { ...plate, font } : plate
             )
             return { ...model, plateList: newPlateList }
+        }
+        case "deselect plate": {
+            return { ...model, selectedPlate: null }
         }
     }
 }

@@ -2,7 +2,7 @@ import { createEmptyPlateArray } from "./utils"
 
 export type Model = {
     plateList: Plate[],
-    selectedPlateIndex: number | null
+    selectedPlate: [ number, EditOption ] | null
 }
 
 export const initModel: Model = {
@@ -13,19 +13,19 @@ export const initModel: Model = {
         { text: 'Farrar & Tanner', font: 'Script' },
         { text: 'Onion Bhaji', font: 'Handwritten' },
         { text: 'Chris', font: 'Script' },
-        { text: 'CHL', font: 'Handwritten' },
+        { text: 'CHL', font: 'Serif' },
+        { text: 'Chris', font: 'Script' },
+        { text: 'CHL', font: 'Italic' },
         { text: 'Chris', font: 'Script' },
         { text: 'CHL', font: 'Handwritten' },
         { text: 'Chris', font: 'Script' },
-        { text: 'CHL', font: 'Handwritten' },
+        { text: 'CHL', font: 'Classic Script' },
         { text: 'Chris', font: 'Script' },
         { text: 'CHL', font: 'Handwritten' },
         { text: 'Chris', font: 'Script' },
-        { text: 'CHL', font: 'Handwritten' },
-        { text: 'Chris', font: 'Script' },
-        { text: 'CHL', font: 'Handwritten' },
+        { text: 'CHL', font: 'Italic' },
     ],
-    selectedPlateIndex: null
+    selectedPlate: null
 }
 
 export type Plate = {
@@ -36,7 +36,9 @@ export type Plate = {
 export type Font =
     | "Script"
     | "Classic Script"
-    | "Itallic"
+    | "Italic"
     | "Serif"
     | "Sans Serif"
     | "Handwritten"
+
+type EditOption = 'font' | 'text'

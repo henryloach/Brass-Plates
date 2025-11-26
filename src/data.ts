@@ -16,7 +16,7 @@ export const jigSizeY = unitCellY * numRows
 export const fontMap = {
     "Script": "Cursiv",
     "Classic Script": "Dancing Script",
-    "Itallic": "Gentium Book Plus Italic",
+    "Italic": "Gentium Book Plus Italic",
     "Serif": "Merriweather",
     "Sans Serif": "Roboto",
     "Handwritten": "Caveat"
