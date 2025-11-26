@@ -3,8 +3,8 @@ import { Plate } from "./model"
 export const createEmptyPlateArray = (): Plate[] => {
     return Array.from({ length: 16 }, (value, index) => {
         return {
-            text: "test",
-            font: "Serif",
+            text: "",
+            font: "Script",
         }
     })
 }
