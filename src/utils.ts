@@ -1,4 +1,4 @@
-import { defaultFontSize, fontMap, maxWidth, numColumns, plateSizeX, plateSizeY, unitCellX, unitCellY, wallThickness } from "./data"
+import { fontMap, maxWidth, numColumns, plateSizeX, plateSizeY, unitCellX, unitCellY, wallThickness } from "./data"
 import { Plate } from "./model"
 
 export const createEmptyPlateArray = (): Plate[] => {
@@ -27,6 +27,7 @@ export const getRowAndColumn = (index: number): [number, number] => {
 
 export const getFontSizeToFit = (plate: Plate): number => {
     const { text, font } = plate
+    const defaultFontSize = fontMap[font].defaultSize
     const maxWidthPx = maxWidth * 3.78 // mm to px
     const svgNS = "http://www.w3.org/2000/svg"
     const svg = document.createElementNS(svgNS, "svg")

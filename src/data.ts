@@ -1,3 +1,5 @@
+import { Font, FontDetails } from "./model"
+
 export const plateSizeX = 80.75
 export const plateSizeY = 16.35
 export const bevelSize = 1.5
@@ -15,14 +17,13 @@ export const jigSizeY = unitCellY * numRows
 
 export const bodyMargin = 2
 
-export const fontMap = {
-    'Script': { 'font-family': 'Cursiv', 'font-style': 'regular' },
-    'Classic Script': { 'font-family': 'Dancing Script', 'font-style': 'regular' },
-    'Italic': { 'font-family': 'Gentium Book Plus', 'font-style': 'italic' },
-    'Serif': { 'font-family': 'Merriweather', 'font-style': 'regular' },
-    'Sans Serif': { 'font-family': 'Roboto Medium', 'font-style': 'regular' },
-    'Handwritten': { 'font-family': 'Caveat', 'font-style': 'regular' },
+export const fontMap: Record<Font, FontDetails> = {
+    'Script': { 'font-family': 'Cursiv', 'font-style': 'regular', 'defaultSize': 6 },
+    'Classic Script': { 'font-family': 'Dancing Script', 'font-style': 'regular', 'defaultSize': 6 },
+    'Italic': { 'font-family': 'Gentium Book Plus', 'font-style': 'italic', 'defaultSize': 5.5 },
+    'Serif': { 'font-family': 'Merriweather', 'font-style': 'regular', 'defaultSize': 4.5 },
+    'Sans Serif': { 'font-family': 'Roboto Medium', 'font-style': 'regular', 'defaultSize': 4.5 },
+    'Handwritten': { 'font-family': 'Caveat', 'font-style': 'regular', 'defaultSize': 7 },
 }
 
-export const defaultFontSize = 6
 export const maxWidth = plateSizeX - 14

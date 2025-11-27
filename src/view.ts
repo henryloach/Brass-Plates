@@ -83,9 +83,6 @@ const editFontInput = (model: Model, dispatch: (message: Message) => void): VNod
 
     const fontInput = select(
         {
-            attrs: {
-                name: 'Font'
-            },
             style: {
                 position: 'absolute',
                 left: `${x + plateSizeX * 3 / 4}mm`,
@@ -108,7 +105,8 @@ const editFontInput = (model: Model, dispatch: (message: Message) => void): VNod
             return option(
                 {
                     attrs: {
-                        value: fontName
+                        value: fontName,
+                        selected: fontName === model.plateList[index].font
                     }
                 },
                 fontName
@@ -186,6 +184,7 @@ const editTextInput = (model: Model, dispatch: (message: Message) => void): VNod
                 width: `${plateSizeX}mm`,
                 height: `${plateSizeY}mm`,
                 'text-align': 'center',
+                'dominant-baseline': 'auto',
                 'font-size': `${fontSize}mm`,
                 'font-family': fontMap[plate.font]['font-family'],
                 'font-style': fontMap[plate.font]['font-style']

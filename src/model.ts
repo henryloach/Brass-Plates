@@ -2,7 +2,7 @@ import { createEmptyPlateArray } from "./utils"
 
 export type Model = {
     plateList: Plate[],
-    selectedPlate: [ number, EditOption ] | null
+    selectedPlate: [number, EditOption] | null
 }
 
 export const initModel: Model = {
@@ -12,7 +12,7 @@ export const initModel: Model = {
 
 export type Plate = {
     text: string;
-    font: Font;
+    font: Font
 }
 
 export type Font =
@@ -22,5 +22,11 @@ export type Font =
     | "Serif"
     | "Sans Serif"
     | "Handwritten"
+
+export type FontDetails = {
+    'font-family': string;
+    'font-style': string;
+    'defaultSize': number
+}
 
 type EditOption = 'font' | 'text'
