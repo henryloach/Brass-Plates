@@ -53,14 +53,15 @@ const border = h('rect', {
 const unitText = (index: number, plate: Plate) => {
     const [x, y] = getPlatePosition(index, 'center')
     const fontSize = getFontSizeToFit(plate)
+    const baseLineCorrection = fontSize * 0.35
 
     return h('text',
         {
             attrs: {
                 x: `${x}mm`,
-                y: `${y}mm`,
+                y: `${y + baseLineCorrection}mm`,
                 'text-anchor': 'middle',
-                'dominant-baseline': 'central',
+                'dominant-baseline': 'auto',
                 'font-size': `${fontSize}mm`,
                 'font-family': fontMap[plate.font]
             }
