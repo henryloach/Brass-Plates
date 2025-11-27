@@ -18,7 +18,7 @@ export const jigSizeY = unitCellY * numRows
 export const bodyMargin = 2
 
 export const fontMap: Record<Font, FontDetails> = {
-    'Script': { 'font-family': 'Cursiv', 'font-style': 'regular', 'defaultSize': 6 },
+    'Script': { 'font-family': 'Monotype Corsiva Regular', 'font-style': 'regular', 'defaultSize': 6 },
     'Classic Script': { 'font-family': 'Dancing Script', 'font-style': 'regular', 'defaultSize': 6 },
     'Italic': { 'font-family': 'Gentium Book Plus', 'font-style': 'italic', 'defaultSize': 5.5 },
     'Serif': { 'font-family': 'Merriweather', 'font-style': 'regular', 'defaultSize': 4.5 },

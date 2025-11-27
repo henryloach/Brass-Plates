@@ -1,9 +1,9 @@
 import { h, VNode } from 'snabbdom'
 import hh from 'hyperscript-helpers'
-import { Model, Plate } from './model'
+import { Font, Model, Plate } from './model'
 import { Message } from './messages'
 import { fontMap, plateSizeX, plateSizeY, bevelSize, numColumns, jigSizeX, jigSizeY, numRows, bodyMargin } from './data'
-import { getFontSizeToFit, getPlatePosition } from './utils'
+import { getFontSizeToFit, getPlatePosition, sizeMultiplier } from './utils'
 
 const { div, button, svg, input, select, option, span } = hh(h)
 
@@ -52,8 +52,9 @@ const border = h('rect', {
 
 const unitText = (index: number, plate: Plate) => {
     const [x, y] = getPlatePosition(index, 'center')
-    const fontSize = getFontSizeToFit(plate)
+    const fontSize = getFontSizeToFit(plate) * sizeMultiplier(plate)
     const baseLineCorrection = fontSize * 0.35
+
 
     return h('text',
         {
@@ -76,8 +77,7 @@ const editFontInput = (model: Model, dispatch: (message: Message) => void): VNod
     if (model.selectedPlate === null) return null
     const [index, editOption] = model.selectedPlate
     if (editOption === 'text') return null
-
-
+    const plate = model.plateList[index]
     let [x, y] = getPlatePosition(index, 'topLeft');
     [x, y] = [x + bodyMargin, y + bodyMargin]
 
@@ -88,7 +88,9 @@ const editFontInput = (model: Model, dispatch: (message: Message) => void): VNod
                 left: `${x + plateSizeX * 3 / 4}mm`,
                 top: `${y}mm`,
                 width: `${plateSizeX * 1 / 4}mm`,
-                height: `${plateSizeY}mm`
+                height: `${plateSizeY}mm`,
+                'font-family': fontMap[plate.font]['font-family'],
+                'font-style': fontMap[plate.font]['font-style']
             },
             hook: {
                 insert: (vnode: any) => {
@@ -102,11 +104,16 @@ const editFontInput = (model: Model, dispatch: (message: Message) => void): VNod
             }
         },
         Object.keys(fontMap).map(fontName => {
+            const name = fontName as Font
             return option(
                 {
                     attrs: {
                         value: fontName,
                         selected: fontName === model.plateList[index].font
+                    },
+                    style: {
+                        'font-family': fontMap[name]['font-family'],
+                        'font-style': fontMap[name]['font-style']
                     }
                 },
                 fontName
@@ -167,7 +174,7 @@ const editTextInput = (model: Model, dispatch: (message: Message) => void): VNod
     [x, y] = [x + bodyMargin, y + bodyMargin]
 
 
-    const fontSize = getFontSizeToFit(plate)
+    const fontSize = getFontSizeToFit(plate) * sizeMultiplier(plate)
 
     const textInput = input(
         {
@@ -184,7 +191,6 @@ const editTextInput = (model: Model, dispatch: (message: Message) => void): VNod
                 width: `${plateSizeX}mm`,
                 height: `${plateSizeY}mm`,
                 'text-align': 'center',
-                'dominant-baseline': 'auto',
                 'font-size': `${fontSize}mm`,
                 'font-family': fontMap[plate.font]['font-family'],
                 'font-style': fontMap[plate.font]['font-style']

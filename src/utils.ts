@@ -49,3 +49,47 @@ export const getFontSizeToFit = (plate: Plate): number => {
     if (textWidth <= maxWidthPx) return defaultFontSize
     return defaultFontSize * (maxWidthPx / textWidth)
 }
+
+export const sizeMultiplier = (plate: Plate): number => {
+    const { text } = plate
+    let initialMultiplier = 1
+
+    if (uppercaseFraction(text) > 0.8) initialMultiplier *= 0.95
+    else if (uppercaseFraction(text) > 0.5) initialMultiplier *= 0.9
+
+    if (alphanumericLength(text) <= 2) initialMultiplier *= 1.2
+    if (alphanumericLength(text) <= 3) initialMultiplier *= 1.1
+
+    return initialMultiplier
+
+}
+
+const uppercaseFraction = (input: string): number => {
+    let total = 0
+    let upper = 0
+
+    for (const ch of input) {
+        if (/^[A-Za-z0-9]$/.test(ch)) {
+            total++
+
+            // Digits count as uppercase
+            if (/[A-Z0-9]/.test(ch)) {
+                upper++
+            }
+        }
+    }
+
+    return total === 0 ? 0 : upper / total
+}
+
+const alphanumericLength = (input: string): number => {
+    let count = 0
+
+    for (const ch of input) {
+        if (/^[A-Za-z0-9]$/.test(ch)) {
+            count++
+        }
+    }
+
+    return count
+}
