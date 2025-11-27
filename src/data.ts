@@ -16,13 +16,13 @@ export const jigSizeY = unitCellY * numRows
 export const bodyMargin = 2
 
 export const fontMap = {
-    "Script": "Cursiv",
-    "Classic Script": "Dancing Script",
-    "Italic": "Gentium Book Plus Italic",
-    "Serif": "Merriweather",
-    "Sans Serif": "Roboto",
-    "Handwritten": "Caveat"
+    'Script': { 'font-family': 'Cursiv', 'font-style': 'regular' },
+    'Classic Script': { 'font-family': 'Dancing Script', 'font-style': 'regular' },
+    'Italic': { 'font-family': 'Gentium Book Plus', 'font-style': 'italic' },
+    'Serif': { 'font-family': 'Merriweather', 'font-style': 'regular' },
+    'Sans Serif': { 'font-family': 'Roboto Medium', 'font-style': 'regular' },
+    'Handwritten': { 'font-family': 'Caveat', 'font-style': 'regular' },
 }
 
 export const defaultFontSize = 6
-export const maxWidth = plateSizeX - 16
+export const maxWidth = plateSizeX - 14
