@@ -1,4 +1,4 @@
-import { defaultFontSize, maxWidth, numColumns, plateSizeX, plateSizeY, unitCellX, unitCellY, wallThickness } from "./data"
+import { defaultFontSize, fontMap, maxWidth, numColumns, plateSizeX, plateSizeY, unitCellX, unitCellY, wallThickness } from "./data"
 import { Plate } from "./model"
 
 export const createEmptyPlateArray = (): Plate[] => {
@@ -35,7 +35,7 @@ export const getFontSizeToFit = (plate: Plate): number => {
     document.body.appendChild(svg)
 
     const tempText = document.createElementNS(svgNS, "text")
-    tempText.setAttribute("font-family", font)
+    tempText.setAttribute("font-family", fontMap[font])
     tempText.setAttribute("font-size", `${defaultFontSize}mm`)
     tempText.textContent = text
     svg.appendChild(tempText)
