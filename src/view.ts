@@ -33,7 +33,16 @@ const unitCell = (index: number, dispatch: (message: Message) => void) => {
                 stroke: 'gold',
                 fill: 'none'
             }
-        })
+        }),
+        // h('line', {
+        //     attrs: {
+        //         x1: `${x}mm`,
+        //         y1: `${y + plateSizeY / 2}mm`,
+        //         x2: `${x + plateSizeX}mm`,
+        //         y2: `${y + plateSizeY / 2}mm`,
+        //         stroke: 'gold'
+        //     }
+        // })
     ]
 }
 

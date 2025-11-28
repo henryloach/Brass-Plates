@@ -57,8 +57,10 @@ export const sizeMultiplier = (plate: Plate): number => {
     if (uppercaseFraction(text) > 0.8) initialMultiplier *= 0.95
     else if (uppercaseFraction(text) > 0.5) initialMultiplier *= 0.9
 
-    if (alphanumericLength(text) <= 2) initialMultiplier *= 1.2
-    if (alphanumericLength(text) <= 3) initialMultiplier *= 1.1
+    if (alphanumericLength(text) <= 2) initialMultiplier *= 1.25
+    else if (alphanumericLength(text) <= 3) initialMultiplier *= 1.15
+    else if (alphanumericLength(text) <= 4) initialMultiplier *= 1.1
+    else if (alphanumericLength(text) <= 5) initialMultiplier *= 1.05
 
     return initialMultiplier
 
