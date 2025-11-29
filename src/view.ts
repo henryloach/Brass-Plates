@@ -109,7 +109,12 @@ const editFontInput = (model: Model, dispatch: (message: Message) => void): VNod
             },
             on: {
                 change: (e: any) => dispatch(['edit plate font', index, e.target.value]),
-                blur: () => dispatch(['deselect plate', index])
+                blur: () => dispatch(['deselect plate', index]),
+                keydown: (e: KeyboardEvent) => {
+                    if (e.key === 'Enter') {
+                        index < model.plateList.length - 1 ? dispatch(['select plate text', index + 1]) : dispatch(['deselect plate', index])
+                    }
+                }
             }
         },
         Object.keys(fontMap).map(fontName => {
@@ -215,7 +220,8 @@ const editTextInput = (model: Model, dispatch: (message: Message) => void): VNod
                 input: (e: any) => dispatch(['edit plate text', index, e.target.value]),
                 blur: () => dispatch(['deselect plate', index]),
                 keydown: (e: KeyboardEvent) => {
-                    if (e.key === 'Escape' || e.key === 'Enter') dispatch(['deselect plate', index])
+                    if (e.key === 'Escape') dispatch(['deselect plate', index])
+                    if (e.key === 'Enter') dispatch(['select plate font', index])
                 }
             },
         }
