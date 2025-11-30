@@ -73,7 +73,7 @@ const unitText = (index: number, plate: Plate) => {
                 'text-anchor': 'middle',
                 'dominant-baseline': 'auto',
                 'font-size': `${fontSize}mm`,
-                'font-family': fontMap[plate.font]['font-family'],
+                'font-family': fontMap[plate.font]['font-family'].svg,
                 'font-style': fontMap[plate.font]['font-style']
             }
         },
@@ -98,7 +98,7 @@ const editFontInput = (model: Model, dispatch: (message: Message) => void): VNod
                 top: `${y}mm`,
                 width: `${plateSizeX * 1 / 4}mm`,
                 height: `${plateSizeY}mm`,
-                'font-family': fontMap[plate.font]['font-family'],
+                'font-family': fontMap[plate.font]['font-family'].web,
                 'font-style': fontMap[plate.font]['font-style']
             },
             hook: {
@@ -206,7 +206,7 @@ const editTextInput = (model: Model, dispatch: (message: Message) => void): VNod
                 height: `${plateSizeY}mm`,
                 'text-align': 'center',
                 'font-size': `${fontSize}mm`,
-                'font-family': fontMap[plate.font]['font-family'],
+                'font-family': fontMap[plate.font]['font-family'].web,
                 'font-style': fontMap[plate.font]['font-style']
             },
             hook: {

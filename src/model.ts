@@ -24,7 +24,10 @@ export type Font =
     | "Handwritten"
 
 export type FontDetails = {
-    'font-family': string;
+    'font-family': {
+        'web': string;
+        'svg': string;
+    }
     'font-style': string;
     'defaultSize': number
 }

@@ -36,7 +36,7 @@ export const getFontSizeToFit = (plate: Plate): number => {
     document.body.appendChild(svg)
 
     const tempText = document.createElementNS(svgNS, "text")
-    tempText.setAttribute("font-family", fontMap[font]["font-family"])
+    tempText.setAttribute("font-family", fontMap[font]["font-family"].svg)
     tempText.setAttribute("font-style", fontMap[font]["font-style"])
 
     tempText.setAttribute("font-size", `${defaultFontSize}mm`)
