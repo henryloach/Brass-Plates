@@ -5,12 +5,12 @@ import { Message } from './messages'
 import { fontMap, plateSizeX, plateSizeY, bevelSize, numColumns, jigSizeX, jigSizeY, numRows, bodyMargin } from './data'
 import { getFontSizeToFit, getPlatePosition, sizeMultiplier } from './utils'
 
-const { div, button, svg, input, select, option, span } = hh(h)
+const { div, button, svg, input, select, option, span, pre } = hh(h)
 
-const unitCell = (index: number, dispatch: (message: Message) => void) => {
+const unitCell = (index: number, dispatch: (message: Message) => void, calibrate: boolean) => {
     const [x, y] = getPlatePosition(index, 'topLeft')
 
-    return [
+    const cell = [
         h('rect', {
             attrs: {
                 x: `${x}mm`,
@@ -33,17 +33,77 @@ const unitCell = (index: number, dispatch: (message: Message) => void) => {
                 stroke: 'gold',
                 fill: 'none'
             }
-        }),
-        // h('line', {
-        //     attrs: {
-        //         x1: `${x}mm`,
-        //         y1: `${y + plateSizeY / 2}mm`,
-        //         x2: `${x + plateSizeX}mm`,
-        //         y2: `${y + plateSizeY / 2}mm`,
-        //         stroke: 'gold'
-        //     }
-        // })
+        })
     ]
+
+    const calibration = [
+        h('line', {
+            attrs: {
+                x1: `${x + 5}mm`,
+                y1: `${y + plateSizeY / 2}mm`,
+                x2: `${x + plateSizeX - 5}mm`,
+                y2: `${y + plateSizeY / 2}mm`,
+                stroke: 'black'
+            }
+        }),
+        h('line', {
+            attrs: {
+                x1: `${x + 5}mm`,
+                y1: `${y + plateSizeY / 2 + 5}mm`,
+                x2: `${x + plateSizeX - 5}mm`,
+                y2: `${y + plateSizeY / 2 + 5}mm`,
+                stroke: 'black'
+            }
+        }),
+        h('line', {
+            attrs: {
+                x1: `${x + 5}mm`,
+                y1: `${y + plateSizeY / 2 - 5}mm`,
+                x2: `${x + plateSizeX - 5}mm`,
+                y2: `${y + plateSizeY / 2 - 5}mm`,
+                stroke: 'black'
+            }
+        }),
+        h('line', {
+            attrs: {
+                x1: `${x + plateSizeX / 2}mm`,
+                y1: `${y + plateSizeY / 2 + 5}mm`,
+                x2: `${x + plateSizeX / 2}mm`,
+                y2: `${y + plateSizeY / 2 - 5}mm`,
+                stroke: 'black'
+            }
+        }),
+        h('line', {
+            attrs: {
+                x1: `${x + 5}mm`,
+                y1: `${y + plateSizeY / 2 + 5}mm`,
+                x2: `${x + 5}mm`,
+                y2: `${y + plateSizeY / 2 - 5}mm`,
+                stroke: 'black'
+            }
+        }),
+        h('line', {
+            attrs: {
+                x1: `${x + plateSizeX - 5}mm`,
+                y1: `${y + plateSizeY / 2 + 5}mm`,
+                x2: `${x + plateSizeX - 5}mm`,
+                y2: `${y + plateSizeY / 2 - 5}mm`,
+                stroke: 'black'
+            }
+        }),
+        h('circle', {
+            attrs: {
+                r: '6.5mm',
+                cx: `${x + plateSizeX / 2}mm`,
+                cy: `${y + plateSizeY / 2}mm`,
+                stroke: 'black',
+                fill: 'none'
+            }
+        })
+    ]
+
+    if (calibrate) return cell.concat(calibration)
+    return cell
 }
 
 const border = h('rect', {
@@ -245,7 +305,7 @@ const renderSvg = (model: Model, dispatch: (message: Message) => void): VNode =>
                 return unitText(index, plate)
             }),
             ...Array.from({ length: numColumns * numRows }, (_, index) => {
-                return unitCell(index, dispatch)
+                return unitCell(index, dispatch, model.calibrate)
             }).flat()
         ]
     )
@@ -259,6 +319,17 @@ const downloadButton = button(
     },
     "Download SVG"
 )
+
+const calibrateButton = (dispatch: (message: Message) => void) => {
+    return button(
+        {
+            on: {
+                click: () => dispatch(['toggle calibrate', null])
+            }
+        },
+        "Calibrate"
+    )
+}
 
 const downloadSvg = () => {
     const svgElement = document.querySelector("svg")
@@ -294,6 +365,8 @@ export const view = (model: Model, dispatch: (message: Message) => void) => {
         fontSelectArrows(model, dispatch),
         editTextInput(model, dispatch),
         editFontInput(model, dispatch),
-        downloadButton
+        downloadButton,
+        calibrateButton(dispatch),
+        pre(JSON.stringify(model, null, 2))
     ])
 }

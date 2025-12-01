@@ -2,7 +2,7 @@ import { Font, FontDetails } from "./model"
 
 export const plateSizeX = 80.75
 export const plateSizeY = 16.35
-export const bevelSize = 1.5
+export const bevelSize = 1.675
 
 export const wallThickness = 4.904 // 5 from SCAD
 

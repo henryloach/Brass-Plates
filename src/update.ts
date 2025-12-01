@@ -30,5 +30,8 @@ export const update = (model: Model, message: Message): Model => {
         case "deselect plate": {
             return { ...model, selectedPlate: null }
         }
+        case 'toggle calibrate': {
+            return { ...model, calibrate: !model.calibrate }
+        }
     }
 }

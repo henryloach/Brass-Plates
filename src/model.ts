@@ -1,13 +1,15 @@
 import { createEmptyPlateArray } from "./utils"
 
 export type Model = {
-    plateList: Plate[],
-    selectedPlate: [number, EditOption] | null
+    plateList: Plate[];
+    selectedPlate: [number, EditOption] | null;
+    calibrate: boolean
 }
 
 export const initModel: Model = {
     plateList: createEmptyPlateArray(),
-    selectedPlate: null
+    selectedPlate: null,
+    calibrate: false
 }
 
 export type Plate = {
