@@ -21,33 +21,39 @@ export const fontMap: Record<Font, FontDetails> = {
     'Script': {
         'font-family': { 'web': 'Monotype Corsiva Regular', 'svg': 'Cursiv' },
         'font-style': 'regular',
-        'defaultSize': 7
+        'defaultSize': 7,
+        'baselineCorrection': 0.3
     },
     'Classic Script': {
         'font-family': { 'web': 'Dancing Script', 'svg': 'Dancing Script' },
         'font-style': 'regular',
-        'defaultSize': 7
+        'defaultSize': 7,
+        'baselineCorrection': 0.29
     },
     'Italic': {
         'font-family': { 'web': 'Gentium Book Plus', 'svg': 'Gentium Book Plus' },
         'font-style': 'italic',
-        'defaultSize': 6
+        'defaultSize': 6.5,
+        'baselineCorrection': 0.32
     },
     'Serif': {
         'font-family': { 'web': 'Merriweather', 'svg': 'Merriweather' },
         'font-style': 'regular',
-        'defaultSize': 5
+        'defaultSize': 5.5,
+        'baselineCorrection': 0.38
     },
     'Sans Serif': {
         'font-family': { 'web': 'Roboto Medium', 'svg': 'Roboto Medium' },
         'font-style': 'regular',
-        'defaultSize': 5
+        'defaultSize': 5.5,
+        'baselineCorrection': 0.37
     },
     'Handwritten': {
         'font-family': { 'web': 'Caveat', 'svg': 'Caveat' },
         'font-style': 'regular',
-        'defaultSize': 7.5
+        'defaultSize': 7.5,
+        'baselineCorrection': 0.32
     },
 }
 
-export const maxWidth = plateSizeX - 14
+export const maxWidth = plateSizeX - 19

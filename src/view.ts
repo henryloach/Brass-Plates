@@ -31,18 +31,20 @@ const unitCell = (index: number, dispatch: (message: Message) => void) => {
                 width: `${plateSizeX - 2 * bevelSize}mm`,
                 height: `${plateSizeY - 2 * bevelSize}mm`,
                 stroke: 'gold',
-                fill: 'none'
+                fill: 'none',
+                
             }
         }),
-        // h('line', {
-        //     attrs: {
-        //         x1: `${x}mm`,
-        //         y1: `${y + plateSizeY / 2}mm`,
-        //         x2: `${x + plateSizeX}mm`,
-        //         y2: `${y + plateSizeY / 2}mm`,
-        //         stroke: 'gold'
-        //     }
-        // })
+        h('line', {
+            attrs: {
+                x1: `${x}mm`,
+                y1: `${y + plateSizeY / 2}mm`,
+                x2: `${x + plateSizeX}mm`,
+                y2: `${y + plateSizeY / 2}mm`,
+                stroke: 'gold',
+                opacity: 0.25
+            }
+        })
     ]
 }
 
@@ -62,8 +64,7 @@ const border = h('rect', {
 const unitText = (index: number, plate: Plate) => {
     const [x, y] = getPlatePosition(index, 'center')
     const fontSize = getFontSizeToFit(plate) * sizeMultiplier(plate)
-    const baseLineCorrection = fontSize * 0.35
-
+    const baseLineCorrection = fontSize * fontMap[plate.font].baselineCorrection
 
     return h('text',
         {
@@ -126,7 +127,7 @@ const editFontInput = (model: Model, dispatch: (message: Message) => void): VNod
                         selected: fontName === model.plateList[index].font
                     },
                     style: {
-                        'font-family': fontMap[name]['font-family'],
+                        'font-family': fontMap[name]['font-family'].web,
                         'font-style': fontMap[name]['font-style']
                     }
                 },

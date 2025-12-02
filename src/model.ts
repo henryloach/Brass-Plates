@@ -29,7 +29,8 @@ export type FontDetails = {
         'svg': string;
     }
     'font-style': string;
-    'defaultSize': number
+    'defaultSize': number;
+    'baselineCorrection': number
 }
 
 type EditOption = 'font' | 'text'
