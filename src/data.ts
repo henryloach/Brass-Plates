@@ -51,7 +51,7 @@ export const fontMap: Record<Font, FontDetails> = {
     'Handwritten': {
         'font-family': { 'web': 'Caveat', 'svg': 'Caveat' },
         'font-style': 'regular',
-        'defaultSize': 7.5,
+        'defaultSize': 8,
         'baselineCorrection': 0.32
     },
 }
