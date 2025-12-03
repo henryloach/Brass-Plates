@@ -22,13 +22,13 @@ export const fontMap: Record<Font, FontDetails> = {
         'font-family': { 'web': 'Monotype Corsiva Regular', 'svg': 'Cursiv' },
         'font-style': 'regular',
         'defaultSize': 7,
-        'baselineCorrection': 0.3
+        'baselineCorrection': 0.29
     },
     'Classic Script': {
         'font-family': { 'web': 'Dancing Script', 'svg': 'Dancing Script' },
         'font-style': 'regular',
         'defaultSize': 7,
-        'baselineCorrection': 0.29
+        'baselineCorrection': 0.32
     },
     'Italic': {
         'font-family': { 'web': 'Gentium Book Plus', 'svg': 'Gentium Book Plus' },
